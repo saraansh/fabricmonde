@@ -1,25 +1,54 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Orders</h1>
+<% if current_user %>
+  <center>
+    <h2> Order Management Dashboard </h2>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <%= link_to "Product Management Dashboard", root_url %> |
+    <%= link_to 'New Order', new_order_path %>
 
-  <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
-        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <br /><br />
 
-<br>
+    <%= link_to 'Download as CSV', orders_path(:format => "csv") %>
 
-<%= link_to 'New Order', new_order_path %>
+    <br /><br />
+
+    <table border='5px solid black' cellspacing="2px" cellpadding="5px">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Product Code</th>
+          <th>Order Type</th>
+          <th>Delivery Distance</th>
+          <th>Delivery Time (Land)</th>
+          <th>Delivery Time (Air)</th>
+          <th colspan="2"> Actions </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr>
+            <td><%= order.id %></td>
+            <td><%= order.product_code %></td>
+            <td><%= order.order_type %></td>
+            <td><%= order.delivery_distance %></td>
+            <td><%= order.delivery_time_land %></td>
+            <td><%= order.delivery_time_air %></td>
+            <td><%= link_to 'Show / Edit', edit_order_path(order) %></td>
+            <td><%= link_to 'Remove', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br /><br />
+
+    Logged in as <%= current_user.email %> |
+    <%= link_to "View Profile", user_path(current_user) %> |
+    <%= link_to "Log Out", logout_path %>
+  </center>
+<% else %>
+  <%= link_to "Sign Up", signup_path %> or 
+  <%= link_to "Log In", login_path %>
+<% end %>

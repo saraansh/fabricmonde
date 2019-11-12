@@ -11,6 +11,19 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= form.label :product_code %>
+    <%= form.select :product_code, Product.where('vendor_name = ?', current_user.username).pluck(:product_name).uniq.sort.compact, id: :product_code %>
+  </div>
+  <div class="field">
+    <%= form.label :order_type %>
+    <%= form.select :order_type, Order.pluck(:order_type).uniq.sort.compact, id: :order_type %>
+  </div>
+  <div class="field">
+    <%= form.label :delivery_distance %>
+    <%= form.text_field :delivery_distance, id: :delivery_distance %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

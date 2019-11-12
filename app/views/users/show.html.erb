@@ -11,4 +11,4 @@
 </p>
 
 <%= link_to 'Edit Profile', edit_user_path(@user) %> |
-<%= link_to 'View Products', sessions_path({:username => @user.username, :bypass => true}), :method => :post %>
+<%= link_to 'Homepage', sessions_path({:username => @user.username, :bypass => true}), :method => :post %>

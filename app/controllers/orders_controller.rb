@@ -4,7 +4,15 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    if (current_user)
+      product_names = Product.where('vendor_name = ?', current_user.username).pluck(:product_name).uniq
+      @orders = Order.where('product_code in (?)', product_names)
+      update_delivery_time(@orders)
+      respond_to do |format|
+        format.html
+        format.csv { send_data @orders.to_csv, filename: "orders-#{Date.today}.csv" }
+      end
+    end
   end
 
   # GET /orders/1
@@ -28,7 +36,8 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        @order.update_delivery_time
+        format.html { redirect_to orders_url, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -42,7 +51,8 @@ class OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        @order.update_delivery_time
+        format.html { redirect_to orders_url, notice: 'Order was successfully updated.' }
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit }
@@ -56,7 +66,7 @@ class OrdersController < ApplicationController
   def destroy
     @order.destroy
     respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
+      format.html { redirect_to orders_url, notice: 'Order was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +79,14 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.fetch(:order, {})
+      params.require(:order).permit(:id, :product_code, :order_type, :delivery_distance)
+    end
+
+    # updates delivery time for all orders
+    # should be run once if a direct change is made to the database
+    def update_delivery_time(orders = [])
+      orders.each do |order|
+        order.update_delivery_time
+      end
     end
 end

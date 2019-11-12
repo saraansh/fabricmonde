@@ -1,12 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <% if current_user %>
-  <% @products = Product.where('vendor_name = ?', current_user.username) %>
-
   <center>
     <h2> Product Management Dashboard </h2>
 
-    <%= link_to 'Add Product', new_product_path %>
+    <%= link_to "Order Management Dashboard", orders_path %> | <%= link_to 'Add Product', new_product_path %>
+
+    <br /><br />
+
+    <%= link_to 'Download as CSV', root_url(:format => "csv") %>
 
     <br /><br />
 
@@ -15,6 +17,12 @@
         <tr>
           <th>Product ID</th>
           <th>Product Name</th>
+          <th>Weave</th>
+          <th>Composition</th>
+          <th>Color</th>
+          <th>Category1</th>
+          <th>Category2</th>
+          <th>Category3</th>
           <th colspan="2"> Actions </th>
         </tr>
       </thead>
@@ -24,6 +32,12 @@
           <tr>
             <td><%= product.product_id %></td>
             <td><%= product.product_name %></td>
+            <td><%= product.weave %></td>
+            <td><%= product.composition %></td>
+            <td><%= product.color %></td>
+            <td><%= product.category1 %></td>
+            <td><%= product.category2 %></td>
+            <td><%= product.category3 %></td>
             <td><%= link_to 'Show / Edit', edit_product_path(product) %></td>
             <td><%= link_to 'Remove', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
@@ -33,7 +47,9 @@
 
     <br /><br />
 
-    Logged in as <%= current_user.email %>. <%= link_to "Log Out", logout_path %>
+    Logged in as <%= current_user.email %> |
+    <%= link_to "View Profile", user_path(current_user) %> |
+    <%= link_to "Log Out", logout_path %>
   </center>
 <% else %>
   <%= link_to "Sign Up", signup_path %> or 

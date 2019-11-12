@@ -3,9 +3,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    puts "\n\n\n::::::::::: PARAMS HERE ::::::::::::::\n\n\n"
-    puts params
-    puts "\n\n\n::::::::::: PARAMS HERE ::::::::::::::\n\n\n"
     user = User.where(["email = ? or username = ?", params[:email], params[:username]]).first
     if user && (user.authenticate(params[:password]) || params[:bypass])
       session[:user_id] = user.id
