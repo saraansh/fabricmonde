@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<% if current_user %>
+  <% @products = Product.where('vendor_name = ?', current_user.username) %>
+
+  <center>
+    <h2> Product Management Dashboard </h2>
+
+    <%= link_to 'Add Product', new_product_path %>
+
+    <br /><br />
+
+    <table border='5px solid black' cellspacing="2px" cellpadding="5px">
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th colspan="2"> Actions </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.product_id %></td>
+            <td><%= product.product_name %></td>
+            <td><%= link_to 'Show / Edit', edit_product_path(product) %></td>
+            <td><%= link_to 'Remove', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br /><br />
+
+    Logged in as <%= current_user.email %>. <%= link_to "Log Out", logout_path %>
+  </center>
+<% else %>
+  <%= link_to "Sign Up", signup_path %> or 
+  <%= link_to "Log In", login_path %>
+<% end %>

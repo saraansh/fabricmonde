@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @user.username %>
+</p>
+
+<%= link_to 'Edit Profile', edit_user_path(@user) %> |
+<%= link_to 'View Products', sessions_path({:username => @user.username, :bypass => true}), :method => :post %>

@@ -1,0 +1,42 @@
+<%= form_with(model: product, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :product_id %>
+    <%= form.text_field :product_id, id: :product_id %>
+  </div>
+  <div class="field">
+    <%= form.label :product_name %>
+    <%= form.text_field :product_name, id: :product_name %>
+  </div>
+  <div class="field">
+    <%= form.label :weave %>
+    <%= form.text_field :weave, id: :weave %>
+  </div>
+  <div class="field">
+    <%= form.label :composition %>
+    <%= form.text_field :composition %>
+  </div>
+  <div class="field">
+    <%= form.label :color %>
+    <%= form.text_field :color %>
+  </div>
+  <div class="field">
+    <%= form.label :category1 %>
+    <%= form.select :category1, (Product.pluck(:category1) + ['']).uniq.sort, id: :category1 %>
+  </div>
+  <div class="field">
+    <%= form.label :category2 %>
+    <%= form.select :category2, (Product.pluck(:category2) + ['']).uniq.sort, id: :category2 %>
+  </div>
+  <div class="field">
+    <%= form.label :category3 %>
+    <%= form.select :category3, (Product.pluck(:category3) + ['']).uniq.sort, id: :category3 %>
+  </div>
+  <div class="field">
+    <%= form.label :vendor_name %>
+    <%= form.select :vendor_name, [current_user.username], id: :vendor_name %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
